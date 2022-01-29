@@ -27,4 +27,10 @@ describe("Show User Profile", () => {
 
     expect(showUserProfile).toHaveProperty("id");
   });
+
+  it("Should not be able to show an inexistent user profile", () => {
+    expect(async () => {
+      await showUserProfileUseCase.execute("non_user_id");
+    }).rejects.toBeInstanceOf(ShowUserProfileError);
+  });
 });
