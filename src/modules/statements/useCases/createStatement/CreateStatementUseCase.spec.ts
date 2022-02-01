@@ -3,7 +3,6 @@ import { InMemoryStatementsRepository } from "@modules/statements/repositories/i
 import { InMemoryUsersRepository } from "@modules/users/repositories/in-memory/InMemoryUsersRepository";
 import { CreateUserUseCase } from "@modules/users/useCases/createUser/CreateUserUseCase";
 import { CreateStatementUseCase } from "./CreateStatementUseCase";
-import { ICreateStatementDTO } from "./ICreateStatementDTO";
 
 let usersRepositoryInMemory: InMemoryUsersRepository;
 let createUsersUseCase: CreateUserUseCase;
@@ -38,5 +37,31 @@ describe("Create a Statement", () => {
     expect(deposit).toHaveProperty("id");
     expect(deposit).toHaveProperty("type");
     expect(deposit).toHaveProperty("amount");
+  });
+
+  it("Should be able to make a withdraw", async () => {
+    const user = await createUsersUseCase.execute({
+      name: "User Test",
+      email: "user@test.com",
+      password: "1234",
+    });
+
+    await createStatementUseCase.execute({
+      user_id: user.id,
+      type: OperationType.DEPOSIT,
+      amount: 1000,
+      description: "Add test deposit",
+    });
+
+    const withdraw = await createStatementUseCase.execute({
+      user_id: user.id,
+      type: OperationType.WITHDRAW,
+      amount: 550,
+      description: "Withdraw test",
+    });
+
+    expect(withdraw).toHaveProperty("id");
+    expect(withdraw).toHaveProperty("type");
+    expect(withdraw).toHaveProperty("amount");
   });
 });
