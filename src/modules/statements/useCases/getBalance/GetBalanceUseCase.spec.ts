@@ -2,6 +2,7 @@ import { OperationType } from "@modules/statements/enums/OperationType";
 import { InMemoryStatementsRepository } from "@modules/statements/repositories/in-memory/InMemoryStatementsRepository";
 import { InMemoryUsersRepository } from "@modules/users/repositories/in-memory/InMemoryUsersRepository";
 import { CreateUserUseCase } from "@modules/users/useCases/createUser/CreateUserUseCase";
+import { GetBalanceError } from "./GetBalanceError";
 import { GetBalanceUseCase } from "./GetBalanceUseCase";
 
 let usersRepositoryInMemory: InMemoryUsersRepository;
@@ -41,5 +42,13 @@ describe("Get Balance", () => {
     expect(balance).toHaveProperty("statement");
     expect(balance).toHaveProperty("balance");
     expect(balance.balance).toEqual(150);
+  });
+
+  it("Should not be able to get balance of a non-existent user", () => {
+    expect(async () => {
+      await getBalanceUseCase.execute({
+        user_id: "nonExistent_user_id",
+      });
+    }).rejects.toBeInstanceOf(GetBalanceError);
   });
 });
