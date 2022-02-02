@@ -76,4 +76,28 @@ describe("Create a Statement", () => {
 
     expect(withdrawStatement).toMatchObject(withdraw);
   });
+
+  it("Should not be able to create a statement if funds is insufficient", () => {
+    expect(async () => {
+      const user = await createUsersUseCase.execute({
+        name: "User Test",
+        email: "user@test.com",
+        password: "1234",
+      });
+
+      await createStatementUseCase.execute({
+        user_id: user.id,
+        type: OperationType.DEPOSIT,
+        amount: 500,
+        description: "Add test deposit",
+      });
+
+      await createStatementUseCase.execute({
+        user_id: user.id,
+        type: OperationType.WITHDRAW,
+        amount: 550,
+        description: "Withdraw test",
+      });
+    }).rejects.toBeInstanceOf(CreateStatementError.InsufficientFunds);
+  });
 });
