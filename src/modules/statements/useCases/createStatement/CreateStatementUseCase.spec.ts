@@ -39,16 +39,16 @@ describe("Create a Statement", () => {
       password: "1234",
     });
 
-    const deposit = await createStatementUseCase.execute({
+    const deposit = {
       user_id: user.id,
       type: OperationType.DEPOSIT,
       amount: 1000,
       description: "Add test deposit",
-    });
+    };
 
-    expect(deposit).toHaveProperty("id");
-    expect(deposit).toHaveProperty("type");
-    expect(deposit).toHaveProperty("amount");
+    const depositStatement = await createStatementUseCase.execute(deposit);
+
+    expect(depositStatement).toMatchObject(deposit);
   });
 
   it("Should be able to create a statement with withdraw type", async () => {
@@ -65,15 +65,15 @@ describe("Create a Statement", () => {
       description: "Add test deposit",
     });
 
-    const withdraw = await createStatementUseCase.execute({
+    const withdraw = {
       user_id: user.id,
       type: OperationType.WITHDRAW,
       amount: 550,
       description: "Withdraw test",
-    });
+    };
 
-    expect(withdraw).toHaveProperty("id");
-    expect(withdraw).toHaveProperty("type");
-    expect(withdraw).toHaveProperty("amount");
+    const withdrawStatement = await createStatementUseCase.execute(withdraw);
+
+    expect(withdrawStatement).toMatchObject(withdraw);
   });
 });
