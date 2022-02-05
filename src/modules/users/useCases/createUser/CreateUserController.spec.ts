@@ -5,6 +5,7 @@ import { Connection } from "typeorm";
 import { v4 as uuid } from "uuid";
 import { hash } from "bcryptjs";
 import { app } from "../../../../app";
+import { CreateUserError } from "./CreateUserError";
 
 describe("Create User Controller", () => {
   let connection: Connection;
@@ -26,5 +27,21 @@ describe("Create User Controller", () => {
     });
 
     expect(response.status).toBe(201);
+  });
+
+  it("Should not be able to create a user if email already exists", async () => {
+    await request(app).post("/api/v1/users").send({
+      name: "User Test",
+      email: "test@test.com",
+      password: "1234",
+    });
+
+    const response = await request(app).post("/api/v1/users").send({
+      name: "User Test",
+      email: "test@test.com",
+      password: "1234",
+    });
+
+    expect(response.status).toBe(400);
   });
 });
