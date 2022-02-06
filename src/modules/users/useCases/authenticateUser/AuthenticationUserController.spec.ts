@@ -25,7 +25,7 @@ describe("Authenticate User Controller", () => {
     await connection.close();
   });
 
-  it("Create User Authentication", async () => {
+  it("Shound be able to create user authentication", async () => {
     const responseSession = await request(app).post("/api/v1/sessions").send({
       email: "admin@admin.com",
       password: "admin",
@@ -34,5 +34,23 @@ describe("Authenticate User Controller", () => {
     expect(responseSession.status).toBe(200);
     expect(responseSession.body).toHaveProperty("token");
     expect(responseSession.body.user.email).toEqual("admin@admin.com");
+  });
+
+  it("Shound not be able to authenticate user with incorrect email", async () => {
+    const responseSession = await request(app).post("/api/v1/sessions").send({
+      email: "incorrectAdmin@admin.com",
+      password: "admin",
+    });
+
+    expect(responseSession.status).toBe(401);
+  });
+
+  it("Shound not be able to authenticate user with incorrect password", async () => {
+    const responseSession = await request(app).post("/api/v1/sessions").send({
+      email: "admin@admin.com",
+      password: "incorrectPassword",
+    });
+
+    expect(responseSession.status).toBe(401);
   });
 });
