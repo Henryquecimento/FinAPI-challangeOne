@@ -1,11 +1,7 @@
-import createConnection from "../../../../database/index";
 import request from "supertest";
 import { Connection } from "typeorm";
-
-import { v4 as uuid } from "uuid";
-import { hash } from "bcryptjs";
 import { app } from "../../../../app";
-import { CreateUserError } from "./CreateUserError";
+import createConnection from "../../../../database/index";
 
 describe("Create User Controller", () => {
   let connection: Connection;
