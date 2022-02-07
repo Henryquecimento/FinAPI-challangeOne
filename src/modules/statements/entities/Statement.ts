@@ -26,7 +26,7 @@ export class Statement {
   @Column()
   description: string;
 
-  @Column("decimal", { precision: 5, scale: 2 })
+  @Column("decimal")
   amount: number;
 
   @Column({ type: "enum", enum: OperationType })
