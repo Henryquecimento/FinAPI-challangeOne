@@ -25,32 +25,6 @@ describe("Create Statement Controller", () => {
     await connection.close();
   });
 
-  it("Should not be able to create an statement for a non-existing user", async () => {
-    const responseSession = await request(app)
-      .post("/api/v1/statements/deposit")
-      .send({
-        name: "admin",
-        email: "admin@admin.com",
-        password: "admin",
-      });
-
-    const { token } = responseSession.body;
-
-    const response = await request(app)
-      .post("/api/v1/deposit")
-      .send({
-        user_id: "nonExistent_user_id",
-        type: OperationType.DEPOSIT,
-        amount: 800,
-        description: "Add deposit test",
-      })
-      .set({
-        Authentication: `Bearer ${token}`,
-      });
-
-    expect(response.status).toBe(404);
-  });
-
   it("Should be able to create an statement of deposit type", async () => {
     const responseSession = await request(app).post("/api/v1/sessions").send({
       name: "admin",
