@@ -26,11 +26,13 @@ describe("Create Statement Controller", () => {
   });
 
   it("Should not be able to create an statement for a non-existing user", async () => {
-    const responseSession = await request(app).post("/api/v1/deposit").send({
-      name: "admin",
-      email: "admin@admin.com",
-      password: "admin",
-    });
+    const responseSession = await request(app)
+      .post("/api/v1/statements/deposit")
+      .send({
+        name: "admin",
+        email: "admin@admin.com",
+        password: "admin",
+      });
 
     const { token } = responseSession.body;
 
